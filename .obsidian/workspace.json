@@ -11,14 +11,10 @@
             "id": "0f2299760a86e263",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "计组实验代码.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "计组实验代码"
+              "title": "新标签页"
             }
           }
         ]
@@ -183,6 +179,8 @@
       "bases:创建新数据库": false
     }
   },
-  "active": "0f2299760a86e263",
-  "lastOpenFiles": []
+  "active": "2c8e0c6163067da3",
+  "lastOpenFiles": [
+    "未命名"
+  ]
 }
