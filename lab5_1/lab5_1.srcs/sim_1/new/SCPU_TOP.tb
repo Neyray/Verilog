@@ -1,0 +1,110 @@
+`timescale 1ns / 1ps
+
+module tb_SCPU_TOP;
+
+// 输入信号定义
+reg clk;
+reg rstn;
+reg [15:0] sw_i;
+
+// 输出信号定义
+wire [7:0] disp_an_o;
+wire [7:0] disp_seg_o;
+
+// 例化顶层模块
+SCPU_TOP uut (
+    .clk(clk),
+    .rstn(rstn),
+    .sw_i(sw_i),
+    .disp_an_o(disp_an_o),
+    .disp_seg_o(disp_seg_o)
+);
+
+// 提取顶层模块内部需要显示的信号
+wire [31:0] clkdiv = uut.clkdiv;
+wire Clk_CPU = uut.Clk_CPU;
+wire RegWrite = uut.RegWrite;
+wire [2:0] rd = uut.rd;
+wire [31:0] WD = uut.WD;
+wire Clk_5 = uut.Clk_5;
+wire clk_half = uut.clk_half;
+wire [31:0] immout = uut.immout;
+wire ALUSrc = uut.ALUSrc;
+wire [1:0] WDSel = uut.WDSel;
+wire [2:0] rs1 = uut.rs1;
+wire [2:0] rs2 = uut.rs2;
+wire [31:0] RD1 = uut.RD1;
+wire [31:0] RD2 = uut.RD2;
+wire [4:0] ALUOp = uut.ALUOp;
+wire [31:0] aluout = uut.aluout;
+wire [7:0] Zero = uut.Zero;
+wire MemWrite = uut.MemWrite;
+wire [31:0] dm_addr = uut.dm_addr;
+wire [31:0] dm_din = uut.dm_din;
+wire [2:0] DMType = uut.DMType;
+wire [31:0] dm_out = uut.dm_out;
+wire [31:0] instr = uut.instr;
+wire [4:0] pc = uut.pc;
+wire [31:0]rf[31:0] = uut.U_RF.rf;
+wire [31:0] _RD1 =  uut.U_RF.RD1;
+wire [31:0] _RD2 =  uut.U_RF.RD2;
+wire [7:0]dmem[31:0] = uut.U_DM.dmem;
+wire [31:0]dout=uut.U_DM.dout;
+// 时钟生成：10ns周期（100MHz）
+initial begin
+    clk = 0;
+    forever #5 clk = ~clk;
+end
+
+// 测试激励
+initial begin
+    // 初始化信号
+    rstn = 0;
+    sw_i = 16'b0000000000000000;  // sw_i[1]=0让PC递增，sw_i[15]=0选择clkdiv[25]作为Clk_CPU
+    #10;
+    rstn = 1;  // 释放复位
+    
+    // 保持仿真运行至1000ns
+    #990;
+    
+    $finish;
+end
+
+// 指定波形中显示的信号
+initial begin
+    $dumpfile("tb_SCPU_TOP.vcd");
+    $dumpvars(0, tb_SCPU_TOP);
+    
+    // 显式指定需要跟踪的关键信号（确保Vivado波形中显示）
+    $dumpvars(1, clkdiv);
+    $dumpvars(1, Clk_CPU);
+    $dumpvars(1, RegWrite);
+    $dumpvars(1, rd);
+    $dumpvars(1, WD);
+    $dumpvars(1, Clk_5);
+    $dumpvars(1, clk_half);
+    $dumpvars(1, immout);
+    $dumpvars(1, ALUSrc);
+    $dumpvars(1, WDSel);
+    $dumpvars(1, rs1);
+    $dumpvars(1, rs2);
+    $dumpvars(1, RD1);
+    $dumpvars(1, RD2);
+    $dumpvars(1, ALUOp);
+    $dumpvars(1, aluout);
+    $dumpvars(1, Zero);
+    $dumpvars(1, MemWrite);
+    $dumpvars(1, dm_addr);
+    $dumpvars(1, dm_din);
+    $dumpvars(1, DMType);
+    $dumpvars(1, dm_out);
+    $dumpvars(1, instr);
+    $dumpvars(1, pc);
+    $dumpvars(1, rf);
+    $dumpvars(1, _RD1);
+    $dumpvars(1, _RD2);
+    $dumpvars(1, dmem);
+    $dumpvars(1, dout);
+end
+
+endmodule
